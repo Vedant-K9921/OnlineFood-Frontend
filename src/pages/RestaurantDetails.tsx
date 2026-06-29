@@ -11,12 +11,13 @@ import {
   getRestaurantById,
   getRestaurantMenu,
 } from "../api/restaurantApi";
+import "./RestaurantDetails.css";
 
 import type {
   Restaurant,
   MenuItem,
 } from "../types";
-import Navbar from "../components/Navbar";
+//import Navbar from "../components/Navbar";
 import { addToCart } from "../api/cartApi";
 
 export default function RestaurantDetails() {
@@ -67,45 +68,70 @@ export default function RestaurantDetails() {
   }
 
   return (
-     <>
-    <Navbar />
-    <div>
+  <>
+    <div className="restaurant-header">
       <h1>{restaurant.name}</h1>
 
       <p>{restaurant.description}</p>
 
-      <p>
-        Cuisine:
-        {restaurant.cuisineType}
+      <p className="restaurant-meta">
+        📍 {restaurant.address}
       </p>
 
-      <h2>Menu</h2>
+      <p className="restaurant-meta">
+        🍽 {restaurant.cuisineType}
+      </p>
 
+      <p className="restaurant-meta">
+        ⭐ {restaurant.rating.toFixed(1)}
+      </p>
+    </div>
+
+    <h2 className="menu-title">
+      Menu
+    </h2>
+
+    <div className="menu-grid">
       {menu.map((item) => (
         <div
+          className="menu-card"
           key={item.id}
-          style={{
-            border: "1px solid #ddd",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
         >
           <h3>{item.name}</h3>
 
-          <p>{item.description}</p>
+          <p className="menu-description">
+            {item.description}
+          </p>
 
-          <p>₹{item.price}</p>
+          <span
+            className={`tag ${
+              item.isVeg
+                ? "veg"
+                : "nonveg"
+            }`}
+          >
+            {item.isVeg
+              ? "Veg"
+              : "Non-Veg"}
+          </span>
 
-          <button
-  onClick={() =>
-    handleAddToCart(item.id)
-  }
->
-  Add To Cart
-</button>
+          <div className="menu-footer">
+            <span className="price">
+              ₹{item.price}
+            </span>
+
+            <button
+              className="add-btn"
+              onClick={() =>
+                handleAddToCart(item.id)
+              }
+            >
+              Add
+            </button>
+          </div>
         </div>
       ))}
     </div>
-    </>
-  );
+  </>
+);
 }

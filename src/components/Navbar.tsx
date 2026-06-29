@@ -1,31 +1,45 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+import "./Navbar.css";
+
 export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        gap: "20px",
-        padding: "16px",
-        borderBottom: "1px solid #ddd",
-      }}
-    >
-      <Link to="/">Restaurants</Link>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="logo">
+          LocalBites
+        </Link>
 
-      <Link to="/cart">Cart</Link>
+        <div className="nav-links">
+          {user && (
+            <>
+              <Link to="/" className="nav-link">
+                Restaurants
+              </Link>
 
-      {user && (
-        <>
-          <span>{user.name}</span>
+              <Link to="/cart" className="nav-link">
+                Cart
+              </Link>
 
-          <button onClick={logout}>
-            Logout
-          </button>
-        </>
-      )}
+              <Link to="/orders" className="nav-link">
+                Orders
+              </Link>
+
+              <span>{user.name}</span>
+
+              <button
+                className="logout-btn"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 }

@@ -7,43 +7,44 @@ import {
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import RestaurantDetails from "./pages/RestaurantDetails";
+import CartPage from "./pages/Cart";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-import CartPage from "./pages/Cart";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Routes */}
         <Route
           path="/login"
           element={<Login />}
         />
 
+        {/* Protected Routes */}
         <Route
-          path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <MainLayout />
             </ProtectedRoute>
           }
-        />
-        <Route
-  path="/restaurants/:id"
-  element={
-    <ProtectedRoute>
-      <RestaurantDetails />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/cart"
-  element={
-    <ProtectedRoute>
-      <CartPage />
-    </ProtectedRoute>
-  }
-/>
+        >
+          <Route
+            path="/"
+            element={<Home />}
+          />
+
+          <Route
+            path="/restaurants/:id"
+            element={<RestaurantDetails />}
+          />
+
+          <Route
+            path="/cart"
+            element={<CartPage />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

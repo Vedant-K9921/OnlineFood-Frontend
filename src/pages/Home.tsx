@@ -6,7 +6,9 @@ import RestaurantCard from "../components/RestaurantCard";
 
 import type { Restaurant } from "../types";
 
-import Navbar from "../components/Navbar";
+//import Navbar from "../components/Navbar";
+
+import "./Home.css";
 
 export default function Home() {
   const [restaurants, setRestaurants] =
@@ -27,11 +29,12 @@ export default function Home() {
 
   return (
   <>
-    <Navbar />
+  
+    <h1 className="home-title">
+      Restaurants
+    </h1>
 
-    <div>
-      <h1>Restaurants</h1>
-
+    <div className="restaurant-grid">
       {restaurants.map((restaurant) => (
         <RestaurantCard
           key={restaurant.id}

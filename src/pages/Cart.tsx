@@ -12,7 +12,7 @@ import type {
   CartItem,
 } from "../types";
 
-import Navbar from "../components/Navbar";
+//import Navbar from "../components/Navbar";
 
 export default function CartPage() {
   const [cart, setCart] =
@@ -80,7 +80,6 @@ export default function CartPage() {
 
   return (
     <>
-      <Navbar />
 
       <div style={{ padding: "20px" }}>
         <h1>My Cart</h1>
