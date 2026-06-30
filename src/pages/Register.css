@@ -1,0 +1,44 @@
+.register-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.register-container h1 {
+    margin-bottom: 25px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.register-form input,
+.register-form select {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.register-btn {
+    border: none;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: var(--primary-dark);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}

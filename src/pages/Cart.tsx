@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   getCart,
@@ -11,20 +12,23 @@ import type {
   Cart,
   CartItem,
 } from "../types";
-
-//import Navbar from "../components/Navbar";
+import "./Cart.css";
 
 export default function CartPage() {
-  const [cart, setCart] =
-    useState<Cart | null>(null);
+  const [cart, setCart] = useState<Cart | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
+  const navigate = useNavigate();
 
   const loadCart = async () => {
     try {
+      setLoading(true);
+
       const data = await getCart();
       setCart(data);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to load cart.");
     } finally {
       setLoading(false);
     }
@@ -34,136 +38,148 @@ export default function CartPage() {
     loadCart();
   }, []);
 
-  const increaseQty = async (
-    item: CartItem
-  ) => {
-    await updateCartItem(
-      item.cartItemId,
-      item.quantity + 1
-    );
+  const increaseQty = async (item: CartItem) => {
+    try {
+      await updateCartItem(
+        item.cartItemId,
+        item.quantity + 1
+      );
 
-    loadCart();
-  };
-
-  const decreaseQty = async (
-    item: CartItem
-  ) => {
-    if (item.quantity === 1) {
-      return;
+      await loadCart();
+    } catch (error) {
+      console.error(error);
+      alert("Unable to update quantity.");
     }
-
-    await updateCartItem(
-      item.cartItemId,
-      item.quantity - 1
-    );
-
-    loadCart();
   };
 
-  const removeItem = async (
-    cartItemId: number
-  ) => {
-    await removeCartItem(cartItemId);
+  const decreaseQty = async (item: CartItem) => {
+    if (item.quantity <= 1) return;
 
-    loadCart();
+    try {
+      await updateCartItem(
+        item.cartItemId,
+        item.quantity - 1
+      );
+
+      await loadCart();
+    } catch (error) {
+      console.error(error);
+      alert("Unable to update quantity.");
+    }
+  };
+
+  const removeItem = async (cartItemId: number) => {
+    try {
+      await removeCartItem(cartItemId);
+      await loadCart();
+    } catch (error) {
+      console.error(error);
+      alert("Unable to remove item.");
+    }
   };
 
   const clearAll = async () => {
-    await clearCart();
+    if (!window.confirm("Clear the entire cart?")) {
+      return;
+    }
 
-    loadCart();
+    try {
+      await clearCart();
+      await loadCart();
+    } catch (error) {
+      console.error(error);
+      alert("Unable to clear cart.");
+    }
   };
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return <h2>Loading Cart...</h2>;
   }
 
   return (
-    <>
+  <div className="cart-page">
+    <h1 className="cart-title">My Cart</h1>
 
-      <div style={{ padding: "20px" }}>
-        <h1>My Cart</h1>
+    {!cart || cart.items.length === 0 ? (
+      <div className="empty-cart">
+        <h2>Your cart is empty</h2>
 
-        {!cart ||
-        cart.items.length === 0 ? (
-          <p>Cart is empty</p>
-        ) : (
-          <>
-            {cart.items.map((item) => (
-              <div
-                key={item.cartItemId}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "10px",
-                  marginBottom: "10px",
-                }}
+        <br />
+
+        <button
+          className="checkout-btn"
+          onClick={() => navigate("/")}
+        >
+          Browse Restaurants
+        </button>
+      </div>
+    ) : (
+      <>
+        {cart.items.map((item) => (
+          <div
+            className="cart-card"
+            key={item.cartItemId}
+          >
+            <h3>{item.menuItemName}</h3>
+
+            <p className="cart-price">
+              Price: ₹{item.price}
+            </p>
+
+            <p className="cart-price">
+              Subtotal: ₹{item.subtotal}
+            </p>
+
+            <div className="quantity-row">
+              <button
+                className="qty-btn"
+                onClick={() => decreaseQty(item)}
               >
-                <h3>
-                  {item.menuItemName}
-                </h3>
+                −
+              </button>
 
-                <p>
-                  Price: ₹{item.price}
-                </p>
+              <strong>{item.quantity}</strong>
 
-                <p>
-                  Subtotal:
-                  ₹{item.subtotal}
-                </p>
-
-                <div>
-                  <button
-                    onClick={() =>
-                      decreaseQty(item)
-                    }
-                  >
-                    -
-                  </button>
-
-                  <span
-                    style={{
-                      margin: "0 10px",
-                    }}
-                  >
-                    {item.quantity}
-                  </span>
-
-                  <button
-                    onClick={() =>
-                      increaseQty(item)
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-
-                <br />
-
-                <button
-                  onClick={() =>
-                    removeItem(
-                      item.cartItemId
-                    )
-                  }
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-
-            <h2>
-              Total: ₹
-              {cart.totalAmount}
-            </h2>
+              <button
+                className="qty-btn"
+                onClick={() => increaseQty(item)}
+              >
+                +
+              </button>
+            </div>
 
             <button
+              className="remove-btn"
+              onClick={() => removeItem(item.cartItemId)}
+            >
+              Remove Item
+            </button>
+          </div>
+        ))}
+
+        <div className="cart-summary">
+          <div className="cart-total">
+            Total: ₹{cart.totalAmount}
+          </div>
+
+          <div className="cart-actions">
+            <button
+              className="checkout-btn"
+              onClick={() => navigate("/checkout")}
+            >
+              Proceed to Checkout
+            </button>
+
+            <button
+              className="clear-btn"
               onClick={clearAll}
             >
               Clear Cart
             </button>
-          </>
-        )}
-      </div>
-    </>
-  );
+          </div>
+        </div>
+      </>
+    )}
+  </div>
+);
 }

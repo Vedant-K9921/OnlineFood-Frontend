@@ -48,3 +48,32 @@ export interface Cart {
   items: CartItem[];
   totalAmount: number;
 }
+
+export interface OrderItem {
+  menuItemId: number;
+  menuItemName: string;
+  quantity: number;
+  priceAtOrder: number;
+  subtotal: number;
+}
+
+export interface Order {
+  id: number;
+  userId: number;
+  restaurantId: number;
+  deliveryAddress: string;
+  status: string;
+  paymentStatus: string;
+  totalAmount: number;
+  createdAt: string;
+  items: OrderItem[];
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  address: string;
+  role: "ROLE_CUSTOMER" | "ROLE_OWNER" | "ROLE_ADMIN";
+}

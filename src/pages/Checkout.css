@@ -1,0 +1,41 @@
+.checkout-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.checkout-container h1 {
+    margin-bottom: 20px;
+}
+
+.checkout-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.checkout-container textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.place-order-btn {
+    border: none;
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.place-order-btn:hover {
+    background: var(--primary-dark);
+}

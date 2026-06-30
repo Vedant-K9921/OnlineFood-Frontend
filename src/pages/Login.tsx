@@ -2,6 +2,7 @@ import { useState } from "react";
 import { login } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -60,6 +61,12 @@ export default function Login() {
       <button type="submit">
         Login
       </button>
+      <p style={{ marginTop: "20px" }}>
+  Don't have an account?{" "}
+  <Link to="/register">
+    Register
+  </Link>
+</p>
     </form>
   );
 }
