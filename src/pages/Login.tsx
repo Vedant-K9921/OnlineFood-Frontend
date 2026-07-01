@@ -14,28 +14,40 @@ export default function Login() {
     useState("");
 
   const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
+  e: React.FormEvent
+) => {
+  e.preventDefault();
 
-    try {
-      const data = await login(
-        email,
-        password
-      );
+  try {
+    const data = await login(
+      email,
+      password
+    );
 
-      localStorage.setItem(
-        "token",
-        data.token
-      );
+    localStorage.setItem(
+      "token",
+      data.token
+    );
 
-      setUser(data.user);
+    setUser(data.user);
 
-      navigate("/");
-    } catch {
-      alert("Login Failed");
+    switch (data.user.role) {
+      case "ROLE_OWNER":
+        navigate("/owner");
+        break;
+
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+
+      default:
+        navigate("/");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Login Failed");
+  }
+};
 
   return (
     <form onSubmit={handleSubmit}>

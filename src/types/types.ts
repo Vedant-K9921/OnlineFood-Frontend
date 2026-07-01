@@ -1,3 +1,4 @@
+/*
 export interface User {
   id: number;
   name: string;
@@ -77,3 +78,4 @@ export interface RegisterRequest {
   address: string;
   role: "ROLE_CUSTOMER" | "ROLE_OWNER" | "ROLE_ADMIN";
 }
+  */
